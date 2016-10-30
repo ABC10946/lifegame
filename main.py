@@ -4,7 +4,7 @@ import curses
 
 class LifeGame():
     def __init__(self,width,height):
-        self.gen = 0
+        self.step = 0
         self.width = width
         self.height = height
         self.field = [[False for x in range(width)] for y in range(height)]
@@ -24,19 +24,20 @@ class LifeGame():
         around_life_count = 0
         for y_delta in range(-1,2):
             for x_delta in range(-1,2):
-                if (y_delta != 0 or x_delta != 0) and (y_pos+y_delta > 0 and y_pos+y_delta < self.height and x_pos+x_delta > 0 and x_pos+x_delta < self.width) and self.field[y_pos+y_delta][x_pos+x_delta]:
+                if (y_delta != 0 or x_delta != 0) and x_pos+x_delta >= 0 and y_pos+y_delta >= 0 and x_pos+x_delta < self.width and y_pos+y_delta < self.height:
+                    if self.field[y_pos+y_delta][x_pos+x_delta]:
                         around_life_count += 1
 
         return around_life_count
 
 
-    def step(self):
-        self.gen += 1
+    def next_step(self):
+        self.step += 1
         around_life_count = 0
         for y in range(self.height):
             for x in range(self.width):
                 around_life_count = self.count_around_life(x,y)
-                
+
                 if around_life_count == 3:
                     self.field_[y][x] = True
 
@@ -64,8 +65,8 @@ class LifeGame():
 
         return "\n".join(["".join([str(int(x)) for x in y]) for y in count_life_field])
 
-    def output_gen(self):
-        return self.gen
+    def output_step(self):
+        return self.step
 
     def clear_field(self):
         self.field = copy.deepcopy(self.zero_field)
@@ -81,17 +82,18 @@ def main():
         curses.cbreak()
         x = 0
         y = 0
+        playFlag = False
         while 1:
+            screen.timeout(100)
             screen.clear()
-            screen.addstr(0,0,"press q to exit, press h,j,k,l to move cursor, press s to next step, press p to change cell state, press c to clear field")
-            screen.addstr(1,0,"GEN:"+str(lifegame.output_gen()))
-            screen.addstr(2,0,lifegame.output_field())
-            screen.addstr(y+2,x,"x")
+            screen.addstr(0,0,"STEP:"+str(lifegame.output_step())+",play:"+("True" if playFlag else "False"))
+            screen.addstr(1,0,lifegame.output_field())
+            screen.addstr(y+1,x,"x")
             c = screen.getch()
             if c == ord("q"):
                 break
             elif c == ord("s"):
-                lifegame.step()
+                lifegame.next_step()
             elif c == ord("h"):
                 if x > 0:
                     x -= 1
@@ -107,11 +109,15 @@ def main():
             elif c == ord("c"):
                 lifegame.clear_field()
             elif c == ord("p"):
+                playFlag = False if playFlag else True
+            elif c == ord("o"):
                 if lifegame.get_state(x,y):
                     lifegame.dead(x,y)
                 else:
                     lifegame.life(x,y)
-                
+
+            if playFlag:
+                lifegame.next_step()
 
         curses.noecho()
         curses.echo()
