@@ -29,30 +29,6 @@ class LifeGame():
 
         return around_life_count
 
-    def grider(self,x,y):
-        self.life(x+1,y)
-        self.life(x+2,y+1)
-        self.life(x+2,y+2)
-        self.life(x+1,y+2)
-        self.life(x,y+2)
-
-    def brinker(self,x,y):
-        self.life(x,y)
-        self.life(x+1,y)
-        self.life(x+2,y)
-
-    def galaxy(self,x,y):
-        for i in range(6):
-            self.life(x,y+i)
-            self.life(x+1,y+i)
-            self.life(x+7,y+i+3)
-            self.life(x+8,y+i+3)
-        for i in range(6):
-            self.life(x+i+3,y)
-            self.life(x+i+3,y+1)
-            self.life(x+i,y+7)
-            self.life(x+i,y+8)
-
 
     def step(self):
         self.gen += 1
