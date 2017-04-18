@@ -1,4 +1,4 @@
-#Lifegame  
+# Lifegame  
 
 This is Conway's game of life that developed in python.
 
