@@ -19,4 +19,4 @@ This is Conway's game of life that developed in python.
 |p|auto next step(interval 100ms)|
 |q|quit|
 |s|next step|
-|w|save file to save.dump|
+|w|save field to save.dump|
