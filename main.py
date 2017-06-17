@@ -1,10 +1,14 @@
 import sys
 import copy
 import curses
+import pickle
 
 class LifeGame():
-    def __init__(self,width,height):
+    def __init__(self):
         self.step = 0
+        self.field = []
+
+    def gen_field(self,width,height):
         self.width = width
         self.height = height
         self.field = [[False for x in range(width)] for y in range(height)]
@@ -71,19 +75,60 @@ class LifeGame():
     def clear_field(self):
         self.field = copy.deepcopy(self.zero_field)
 
+    def save_field(self,filename):
+        f = open(filename,"wb")
+        pickle.dump(self.field,f)
+        f.close()
+        return 0
+
+    def load_field(self,filename):
+        try:
+            f = open(filename,"rb")
+            temp_field = pickle.load(f)
+            temp_field_width = len(temp_field[0])
+            temp_field_height = len(temp_field)
+
+            self.gen_field(temp_field_width,temp_field_height)
+            self.field = temp_field
+
+        except FileNotFoundError:
+            return -1
+
 
 def main():
-    if len(sys.argv) > 2:
+    lifegame = LifeGame()
+    main_loop_flag = True
+    width = 0
+    height = 0
+    if len(sys.argv) == 3:
+        lifegame = LifeGame()
         width = int(sys.argv[1])
         height = int(sys.argv[2])
-        lifegame = LifeGame(width,height)
+        lifegame.gen_field(width,height)
+
+    elif len(sys.argv) == 2:
+        f_name = sys.argv[1]
+        file_handler = lifegame.load_field(f_name)
+        if file_handler == 0:
+            print("File load successful.")
+        elif file_handler == -1:
+            print("File not found.")
+            main_loop_flag = False
+
+    else:
+        main_loop_flag = False
+        print("python main.py <width> <height>")
+        print("python main.py <filename>")
+
+    if main_loop_flag:
+
         screen = curses.initscr()
         curses.noecho()
         curses.cbreak()
         x = 0
         y = 0
         playFlag = False
-        while 1:
+        while True:
             screen.timeout(100)
             screen.clear()
             screen.addstr(0,0,"STEP:"+str(lifegame.output_step())+",play:"+("True" if playFlag else "False"))
@@ -98,13 +143,13 @@ def main():
                 if x > 0:
                     x -= 1
             elif c == ord("j"):
-                if y < height-1:
+                if y < lifegame.height-1:
                     y += 1
             elif c == ord("k"):
                 if y > 0:
                     y -= 1
             elif c == ord("l"):
-                if x < width-1:
+                if x < lifegame.width-1:
                     x += 1
             elif c == ord("c"):
                 lifegame.clear_field()
@@ -115,6 +160,8 @@ def main():
                     lifegame.dead(x,y)
                 else:
                     lifegame.life(x,y)
+            elif c == ord("w"):
+                lifegame.save_field("save.dump")
 
             if playFlag:
                 lifegame.next_step()
@@ -122,9 +169,6 @@ def main():
         curses.noecho()
         curses.echo()
         curses.endwin()
-
-    else:
-        print("python main.py <width> <height>")
 
 if __name__ == "__main__":
     main()
