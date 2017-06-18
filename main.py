@@ -1,6 +1,5 @@
 import sys
 import curses
-import pickle
 from lifegame import *
 
 

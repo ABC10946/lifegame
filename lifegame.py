@@ -1,4 +1,5 @@
 import copy
+import pickle
 
 class LifeGame():
     def __init__(self):
