@@ -6,7 +6,7 @@ This is Conway's game of life that developed in python.
 
 <img src="./out.gif" width="600px">
 
-#How To Use
+# How To Use
 
 |key|control|
 |---|-------|
