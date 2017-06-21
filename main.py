@@ -4,12 +4,11 @@ from lifegame import *
 
 
 def main():
-    lifegame = LifeGame()
+    lifegame = LifeGame("#","_")
     main_loop_flag = True
     width = 0
     height = 0
     if len(sys.argv) == 3:
-        lifegame = LifeGame()
         width = int(sys.argv[1])
         height = int(sys.argv[2])
         lifegame.gen_field(width,height)

@@ -2,9 +2,11 @@ import copy
 import pickle
 
 class LifeGame():
-    def __init__(self):
+    def __init__(self,life_cell_char,dead_cell_char):
         self.step = 0
         self.field = []
+        self.life_cell_char = life_cell_char
+        self.dead_cell_char = dead_cell_char
 
     def gen_field(self,width,height):
         self.width = width
@@ -56,7 +58,7 @@ class LifeGame():
         self.field_ = copy.deepcopy(self.zero_field)
 
     def output_field(self):
-        return "\n".join(["".join([str(int(x)) for x in y]) for y in self.field])
+        return "\n".join(["".join([(self.life_cell_char if x else self.dead_cell_char) for x in y]) for y in self.field])
 
     def output_count_life_field(self):
         print("COUNT LIFE FIELD")
