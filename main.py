@@ -4,7 +4,7 @@ from lifegame import *
 
 
 def main():
-    lifegame = LifeGame("#","_")
+    lifegame = LifeGame("[]","__")
     main_loop_flag = True
     width = 0
     height = 0
@@ -32,7 +32,7 @@ def main():
     screen = curses.initscr()
     screen_height,screen_width = screen.getmaxyx()
     if screen_height <= height or screen_width <= width:
-        print("Window size is too small to show field. (" + str(screen_width-1) + "," + str(screen_height-2) + ")")
+        print("Window size is too small to show field. (" + str(int((screen_width-1)/2)) + "," + str(screen_height-2) + ")")
         main_loop_flag = False
 
     curses.noecho()
@@ -49,7 +49,7 @@ def main():
             screen.addstr(0,0,"STEP:"+str(lifegame.output_step())+",play:"+("True" if playFlag else "False"))
             screen.addstr(1,0,"q to escape program,s to next_step,hjkl to move cursor,c to clear field,o to change cell state,w to save field")
             screen.addstr(2,0,lifegame.output_field())
-            screen.addstr(y+1,x,"x")
+            screen.addstr(y+1,x*2,"XX")
             c = screen.getch()
             if c == ord("q"):
                 break
