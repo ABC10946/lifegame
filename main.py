@@ -59,7 +59,7 @@ def main():
                 if x > 0:
                     x -= 1
             elif c == ord("j"):
-                if y < lifegame.height-1:
+                if y < lifegame.height:
                     y += 1
             elif c == ord("k"):
                 if y > 1:
