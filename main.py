@@ -28,11 +28,14 @@ def main():
         main_loop_flag = False
         print("python main.py <width> <height>")
         print("python main.py <filename>")
+        screen = curses.initscr()
+        screen_height,screen_width = screen.getmaxyx()
+        print("Window size " + str(int((screen_width-1)/2)-1) + "," + str(screen_height-2-1) + ")")
 
     screen = curses.initscr()
     screen_height,screen_width = screen.getmaxyx()
-    if screen_height <= height or screen_width <= width:
-        print("Window size is too small to show field. (" + str(int((screen_width-1)/2)) + "," + str(screen_height-2) + ")")
+    if screen_height-2 <= height or (screen_width-1)/2 <= width:
+        print("Window size is too small to show field. (" + str(int((screen_width-1)/2)-1) + "," + str(screen_height-2-1) + ")")
         main_loop_flag = False
 
     curses.noecho()
